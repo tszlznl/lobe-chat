@@ -119,32 +119,16 @@
         },
         "title": "Zainstaluj i uruchom aplikację Ollama lokalnie",
         "windowsTab": "Windows (wersja podglądowa)"
-      },
-      "unlock": {
-        "cancel": "Anuluj pobieranie",
-        "confirm": "Pobierz",
-        "description": "Wprowadź etykietę modelu Ollama, aby kontynuować sesję",
-        "downloaded": "{{completed}} / {{total}}",
-        "starting": "Rozpoczynanie pobierania...",
-        "title": "Pobierz określony model Ollama"
       }
     },
-    "title": "Ollama"
-  },
-  "sensenova": {
-    "sensenovaAccessKeyID": {
-      "desc": "Wprowadź SenseNova Access Key ID",
-      "placeholder": "SenseNova Access Key ID",
-      "title": "Access Key ID"
-    },
-    "sensenovaAccessKeySecret": {
-      "desc": "Wprowadź SenseNova Access Key Secret",
-      "placeholder": "SenseNova Access Key Secret",
-      "title": "Access Key Secret"
-    },
+    "title": "Ollama",
     "unlock": {
-      "description": "Wprowadź swój Access Key ID / Access Key Secret, aby rozpocząć sesję. Aplikacja nie zapisze twojej konfiguracji autoryzacji",
-      "title": "Użyj niestandardowych informacji autoryzacyjnych SenseNova"
+      "cancel": "Anuluj pobieranie",
+      "confirm": "Pobierz",
+      "description": "Wprowadź etykietę swojego modelu Ollama, aby zakończyć i kontynuować rozmowę",
+      "downloaded": "{{completed}} / {{total}}",
+      "starting": "Rozpoczynam pobieranie...",
+      "title": "Pobierz określony model Ollama"
     }
   },
   "wenxin": {
