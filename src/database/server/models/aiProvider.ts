@@ -1,4 +1,5 @@
 import { and, asc, desc, eq } from 'drizzle-orm/expressions';
+import { isEmpty } from 'lodash-es';
 
 import { LobeChatDatabase } from '@/database/type';
 import { ModelProvider } from '@/libs/agent-runtime';
@@ -114,21 +115,34 @@ export class AiProviderModel {
     const encrypt = encryptor ?? defaultSerialize;
     const keyVaults = await encrypt(JSON.stringify(value.keyVaults));
 
+    const commonFields = {
+      checkModel: value.checkModel,
+      fetchOnClient: value.fetchOnClient,
+      keyVaults,
+    };
+
     return this.db
-      .update(aiProviders)
-      .set({ ...value, keyVaults, updatedAt: new Date() })
-      .where(and(eq(aiProviders.id, id), eq(aiProviders.userId, this.userId)));
+      .insert(aiProviders)
+      .values({
+        ...commonFields,
+        id,
+        source: this.getProviderSource(id),
+        updatedAt: new Date(),
+        userId: this.userId,
+      })
+      .onConflictDoUpdate({
+        set: { ...commonFields, updatedAt: new Date() },
+        target: [aiProviders.id, aiProviders.userId],
+      });
   };
 
   toggleProviderEnabled = async (id: string, enabled: boolean) => {
-    const isBuiltin = Object.values(ModelProvider).includes(id as any);
-
     return this.db
       .insert(aiProviders)
       .values({
         enabled,
         id,
-        source: isBuiltin ? 'builtin' : 'custom',
+        source: this.getProviderSource(id),
         updatedAt: new Date(),
         userId: this.userId,
       })
@@ -141,15 +155,13 @@ export class AiProviderModel {
   updateOrder = async (sortMap: { id: string; sort: number }[]) => {
     await this.db.transaction(async (tx) => {
       const updates = sortMap.map(({ id, sort }) => {
-        const isBuiltin = Object.values(ModelProvider).includes(id as any);
-
         return tx
           .insert(aiProviders)
           .values({
             enabled: true,
             id,
             sort,
-            source: isBuiltin ? 'builtin' : 'custom',
+            source: this.getProviderSource(id),
             updatedAt: new Date(),
             userId: this.userId,
           })
@@ -170,6 +182,7 @@ export class AiProviderModel {
     const query = this.db
       .select({
         checkModel: aiProviders.checkModel,
+        description: aiProviders.description,
         enabled: aiProviders.enabled,
         fetchOnClient: aiProviders.fetchOnClient,
         id: aiProviders.id,
@@ -206,6 +219,7 @@ export class AiProviderModel {
       ...result,
       fetchOnClient: typeof result.fetchOnClient === 'boolean' ? result.fetchOnClient : undefined,
       keyVaults,
+      settings: isEmpty(result.settings) ? undefined : result.settings,
     } as AiProviderDetailItem;
   };
 
@@ -235,4 +249,6 @@ export class AiProviderModel {
   };
 
   private isBuiltInProvider = (id: string) => Object.values(ModelProvider).includes(id as any);
+
+  private getProviderSource = (id: string) => (this.isBuiltInProvider(id) ? 'builtin' : 'custom');
 }
