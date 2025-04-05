@@ -15,19 +15,26 @@ export const searchRouter = router({
   crawlPages: searchProcedure
     .input(
       z.object({
-        impls: z.string().array().optional(),
+        impls: z.enum(['jina', 'naive', 'browserless']).array().optional(),
         urls: z.string().array(),
       }),
     )
     .mutation(async ({ input }) => {
-      const crawler = new Crawler();
+      const envString = toolsEnv.CRAWLER_IMPLS || '';
+
+      // 处理全角逗号和多余空格
+      let envValue = envString.replaceAll('，', ',').trim();
+
+      const impls = envValue.split(',').filter(Boolean);
+
+      const crawler = new Crawler({ impls });
 
       const results = await pMap(
         input.urls,
         async (url) => {
           return await crawler.crawl({ impls: input.impls, url });
         },
-        { concurrency: 10 },
+        { concurrency: 3 },
       );
 
       return { results };

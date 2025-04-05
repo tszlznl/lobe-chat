@@ -3,6 +3,7 @@ import { StateCreator } from 'zustand/vanilla';
 import { searchService } from '@/services/search';
 import { chatSelectors } from '@/store/chat/selectors';
 import { ChatStore } from '@/store/chat/store';
+import { CRAWL_CONTENT_LIMITED_COUNT } from '@/tools/web-browsing/const';
 import { CreateMessageParams } from '@/types/message';
 import {
   SEARCH_SEARXNG_NOT_CONFIG,
@@ -51,29 +52,37 @@ export const searchSlice: StateCreator<
   crawlMultiPages: async (id, params, aiSummary = true) => {
     const { internal_updateMessageContent } = get();
     get().toggleSearchLoading(id, true);
-    const response = await searchService.crawlPages(params.urls);
+    try {
+      const response = await searchService.crawlPages(params.urls);
 
-    await get().updatePluginState(id, response);
-    get().toggleSearchLoading(id, false);
-    const { results } = response;
+      await get().updatePluginState(id, response);
+      get().toggleSearchLoading(id, false);
+      const { results } = response;
 
-    if (!results) return;
+      if (!results) return;
 
-    const content = results.map((item) =>
-      'errorMessage' in item
-        ? item
-        : {
-            ...item.data,
-            // if crawl too many content
-            // slice the top 10000 char
-            content: item.data.content?.slice(0, 10_000),
-          },
-    );
+      const content = results.map((item) =>
+        'errorMessage' in item
+          ? item
+          : {
+              ...item.data,
+              // if crawl too many content
+              // slice the top 10000 char
+              content: item.data.content?.slice(0, CRAWL_CONTENT_LIMITED_COUNT),
+            },
+      );
 
-    await internal_updateMessageContent(id, JSON.stringify(content));
+      await internal_updateMessageContent(id, JSON.stringify(content));
 
-    // if aiSummary is true, then trigger ai message
-    return aiSummary;
+      // if aiSummary is true, then trigger ai message
+      return aiSummary;
+    } catch (e) {
+      const err = e as Error;
+      console.error(e);
+      const content = [{ ...err, errorMessage: err.message, errorType: err.name }];
+
+      await internal_updateMessageContent(id, JSON.stringify(content));
+    }
   },
 
   crawlSinglePage: async (id, params, aiSummary) => {
@@ -124,6 +133,7 @@ export const searchSlice: StateCreator<
       // 2. 将这条 tool call message 插入到 ai 消息的 tools 中
       addToolItem(),
     ]);
+    if (!newMessageId) return;
 
     // 将新创建的 tool message 激活
     openToolUI(newMessageId, message.plugin.identifier);
