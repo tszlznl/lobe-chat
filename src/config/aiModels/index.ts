@@ -24,6 +24,7 @@ import { default as jina } from './jina';
 import { default as lmstudio } from './lmstudio';
 import { default as minimax } from './minimax';
 import { default as mistral } from './mistral';
+import { default as modelscope } from './modelscope';
 import { default as moonshot } from './moonshot';
 import { default as novita } from './novita';
 import { default as nvidia } from './nvidia';
@@ -44,6 +45,7 @@ import { default as taichu } from './taichu';
 import { default as tencentcloud } from './tencentcloud';
 import { default as togetherai } from './togetherai';
 import { default as upstage } from './upstage';
+import { default as v0 } from './v0';
 import { default as vertexai } from './vertexai';
 import { default as vllm } from './vllm';
 import { default as volcengine } from './volcengine';
@@ -97,6 +99,7 @@ export const LOBE_DEFAULT_MODEL_LIST = buildDefaultModelList({
   lmstudio,
   minimax,
   mistral,
+  modelscope,
   moonshot,
   novita,
   nvidia,
@@ -117,6 +120,7 @@ export const LOBE_DEFAULT_MODEL_LIST = buildDefaultModelList({
   tencentcloud,
   togetherai,
   upstage,
+  v0,
   vertexai,
   vllm,
   volcengine,
@@ -151,6 +155,7 @@ export { default as jina } from './jina';
 export { default as lmstudio } from './lmstudio';
 export { default as minimax } from './minimax';
 export { default as mistral } from './mistral';
+export { default as modelscope } from './modelscope';
 export { default as moonshot } from './moonshot';
 export { default as novita } from './novita';
 export { default as nvidia } from './nvidia';
@@ -171,6 +176,7 @@ export { default as taichu } from './taichu';
 export { default as tencentcloud } from './tencentcloud';
 export { default as togetherai } from './togetherai';
 export { default as upstage } from './upstage';
+export { default as v0 } from './v0';
 export { default as vertexai } from './vertexai';
 export { default as vllm } from './vllm';
 export { default as volcengine } from './volcengine';

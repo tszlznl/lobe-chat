@@ -1,5 +1,6 @@
-import { ModelSpeed, ModelTokensUsage } from '@/types/message';
+import { CitationItem, ModelSpeed, ModelTokensUsage } from '@/types/message';
 import { safeParseJSON } from '@/utils/safeParseJSON';
+import { nanoid } from '@/utils/uuid';
 
 import { AgentRuntimeErrorType } from '../../error';
 import { parseToolCalls } from '../../helpers';
@@ -16,10 +17,33 @@ export interface StreamContext {
    * Same as Hunyuan and Wenxin
    */
   returnedCitation?: boolean;
+  /**
+   * Claude's citations are inline and interleaved with text output.
+   * Each text segment may carry references to sources (e.g., web search results)
+   * relevant to that specific portion of the generated content.
+   * This array accumulates all citation items received during the streaming response.
+   */
+  returnedCitationArray?: CitationItem[];
+  /**
+   * O series models need a condition to separate part
+   */
+  startReasoning?: boolean;
   thinking?: {
     id: string;
     name: string;
   };
+  /**
+   * Indicates whether the current state is within a "thinking" segment of the model output
+   * (e.g., when processing lmstudio responses).
+   *
+   * When parsing output containing <think> and </think> tags:
+   * - Set to `true` upon encountering a <think> tag (entering reasoning mode)
+   * - Set to `false` upon encountering a </think> tag (exiting reasoning mode)
+   *
+   * While `thinkingInContent` is `true`, subsequent content should be stored in `reasoning_content`.
+   * When `false`, content should be stored in the regular `content` field.
+   */
+  thinkingInContent?: boolean;
   tool?: {
     id: string;
     index: number;
@@ -71,12 +95,11 @@ export interface StreamToolCallChunkData {
 export interface StreamProtocolToolCallChunk {
   data: StreamToolCallChunkData[];
   id: string;
-  index: number;
   type: 'tool_calls';
 }
 
 export const generateToolCallId = (index: number, functionName?: string) =>
-  `${functionName || 'unknown_tool_call'}_${index}`;
+  `${functionName || 'unknown_tool_call'}_${index}_${nanoid()}`;
 
 const chatStreamable = async function* <T>(stream: AsyncIterable<T>) {
   for await (const response of stream) {

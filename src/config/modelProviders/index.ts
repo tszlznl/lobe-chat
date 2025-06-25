@@ -24,6 +24,7 @@ import JinaProvider from './jina';
 import LMStudioProvider from './lmstudio';
 import MinimaxProvider from './minimax';
 import MistralProvider from './mistral';
+import ModelScopeProvider from './modelscope';
 import MoonshotProvider from './moonshot';
 import NovitaProvider from './novita';
 import NvidiaProvider from './nvidia';
@@ -44,6 +45,7 @@ import TaichuProvider from './taichu';
 import TencentcloudProvider from './tencentcloud';
 import TogetherAIProvider from './togetherai';
 import UpstageProvider from './upstage';
+import V0Provider from './v0';
 import VertexAIProvider from './vertexai';
 import VLLMProvider from './vllm';
 import VolcengineProvider from './volcengine';
@@ -67,6 +69,7 @@ export const LOBE_DEFAULT_MODEL_LIST: ChatModelCard[] = [
   GithubProvider.chatModels,
   MinimaxProvider.chatModels,
   MistralProvider.chatModels,
+  ModelScopeProvider.chatModels,
   MoonshotProvider.chatModels,
   OllamaProvider.chatModels,
   VLLMProvider.chatModels,
@@ -81,6 +84,7 @@ export const LOBE_DEFAULT_MODEL_LIST: ChatModelCard[] = [
   JinaProvider.chatModels,
   SambaNovaProvider.chatModels,
   CohereProvider.chatModels,
+  V0Provider.chatModels,
   ZeroOneProvider.chatModels,
   StepfunProvider.chatModels,
   NovitaProvider.chatModels,
@@ -117,7 +121,6 @@ export const DEFAULT_MODEL_PROVIDER_LIST = [
   GoogleProvider,
   VertexAIProvider,
   DeepSeekProvider,
-  PPIOProvider,
   HuggingFaceProvider,
   OpenRouterProvider,
   CloudflareProvider,
@@ -130,12 +133,14 @@ export const DEFAULT_MODEL_PROVIDER_LIST = [
   GroqProvider,
   PerplexityProvider,
   MistralProvider,
+  ModelScopeProvider,
   Ai21Provider,
   UpstageProvider,
   XAIProvider,
   JinaProvider,
   SambaNovaProvider,
   CohereProvider,
+  V0Provider,
   QwenProvider,
   WenxinProvider,
   TencentcloudProvider,
@@ -194,6 +199,7 @@ export { default as JinaProviderCard } from './jina';
 export { default as LMStudioProviderCard } from './lmstudio';
 export { default as MinimaxProviderCard } from './minimax';
 export { default as MistralProviderCard } from './mistral';
+export { default as ModelScopeProviderCard } from './modelscope';
 export { default as MoonshotProviderCard } from './moonshot';
 export { default as NovitaProviderCard } from './novita';
 export { default as NvidiaProviderCard } from './nvidia';
@@ -214,6 +220,7 @@ export { default as TaichuProviderCard } from './taichu';
 export { default as TencentCloudProviderCard } from './tencentcloud';
 export { default as TogetherAIProviderCard } from './togetherai';
 export { default as UpstageProviderCard } from './upstage';
+export { default as V0ProviderCard } from './v0';
 export { default as VertexAIProviderCard } from './vertexai';
 export { default as VLLMProviderCard } from './vllm';
 export { default as VolcengineProviderCard } from './volcengine';
