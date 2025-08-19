@@ -11,9 +11,12 @@ import { agentChatConfigSelectors, agentSelectors } from '@/store/agent/selector
 import { aiModelSelectors, useAiInfraStore } from '@/store/aiInfra';
 
 import ContextCachingSwitch from './ContextCachingSwitch';
+import GPT5ReasoningEffortSlider from './GPT5ReasoningEffortSlider';
 import ReasoningEffortSlider from './ReasoningEffortSlider';
 import ReasoningTokenSlider from './ReasoningTokenSlider';
+import TextVerbositySlider from './TextVerbositySlider';
 import ThinkingBudgetSlider from './ThinkingBudgetSlider';
+import ThinkingSlider from './ThinkingSlider';
 
 const ControlsForm = memo(() => {
   const { t } = useTranslation('chat');
@@ -73,7 +76,7 @@ const ControlsForm = memo(() => {
       minWidth: undefined,
       name: 'enableReasoning',
     },
-    enableReasoning && {
+    (enableReasoning || modelExtendParams?.includes('reasoningBudgetToken')) && {
       children: <ReasoningTokenSlider />,
       label: t('extendParams.reasoningBudgetToken.title'),
       layout: 'vertical',
@@ -95,6 +98,28 @@ const ControlsForm = memo(() => {
       },
     },
     {
+      children: <GPT5ReasoningEffortSlider />,
+      desc: 'reasoning_effort',
+      label: t('extendParams.reasoningEffort.title'),
+      layout: 'horizontal',
+      minWidth: undefined,
+      name: 'gpt5ReasoningEffort',
+      style: {
+        paddingBottom: 0,
+      },
+    },
+    {
+      children: <TextVerbositySlider />,
+      desc: 'text_verbosity',
+      label: t('extendParams.textVerbosity.title'),
+      layout: 'horizontal',
+      minWidth: undefined,
+      name: 'textVerbosity',
+      style: {
+        paddingBottom: 0,
+      },
+    },
+    {
       children: <ThinkingBudgetSlider />,
       label: t('extendParams.reasoningBudgetToken.title'),
       layout: 'vertical',
@@ -104,6 +129,16 @@ const ControlsForm = memo(() => {
         paddingBottom: 0,
       },
       tag: 'thinkingBudget',
+    },
+    {
+      children: <ThinkingSlider />,
+      label: t('extendParams.thinking.title'),
+      layout: 'horizontal',
+      minWidth: undefined,
+      name: 'thinking',
+      style: {
+        paddingBottom: 0,
+      },
     },
   ].filter(Boolean) as FormItemProps[];
 

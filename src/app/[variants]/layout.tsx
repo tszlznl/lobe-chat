@@ -31,7 +31,13 @@ const RootLayout = async ({ children, params, modal }: RootLayoutProps) => {
   const direction = isRtlLang(locale) ? 'rtl' : 'ltr';
 
   return (
-    <html dir={direction} lang={locale} suppressHydrationWarning>
+    <html dir={direction} lang={locale}>
+      <head>
+        {process.env.DEBUG_REACT_SCAN === '1' && (
+          // eslint-disable-next-line @next/next/no-sync-scripts
+          <script crossOrigin="anonymous" src="https://unpkg.com/react-scan/dist/auto.global.js" />
+        )}
+      </head>
       <body>
         <NuqsAdapter>
           <GlobalProvider
@@ -40,6 +46,7 @@ const RootLayout = async ({ children, params, modal }: RootLayoutProps) => {
             locale={locale}
             neutralColor={neutralColor}
             primaryColor={primaryColor}
+            variants={variants}
           >
             <AuthProvider>
               {children}
@@ -78,13 +85,6 @@ export const generateViewport = async (props: DynamicLayoutProps): ResolvingView
 };
 
 export const generateStaticParams = () => {
-  // if in dev mode or in vercel preview mode, use ISR to speed up
-  const isVercelPreview = process.env.VERCEL === '1' && process.env.VERCEL_ENV !== 'production';
-
-  if (process.env.NODE_ENV !== 'production' || isVercelPreview) {
-    return [];
-  }
-
   const themes: ThemeAppearance[] = ['dark', 'light'];
   const mobileOptions = isDesktop ? [false] : [true, false];
   // only static for serveral page, other go to dynamtic

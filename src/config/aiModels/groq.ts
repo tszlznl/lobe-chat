@@ -24,27 +24,23 @@ const groqChatModels: AIChatModelCard[] = [
     type: 'chat',
   },
   {
-    contextWindowTokens: 131_072,
-    displayName: 'Llama 4 Scout (17Bx16E)',
-    enabled: true,
-    id: 'meta-llama/llama-4-scout-17b-16e-instruct',
-    maxOutput: 8192,
-    pricing: {
-      input: 0.11,
-      output: 0.34,
+    abilities: {
+      functionCall: true,
+      reasoning: true,
     },
-    type: 'chat',
-  },
-  {
     contextWindowTokens: 131_072,
-    displayName: 'Llama 4 Maverick (17Bx128E)',
-    enabled: true,
-    id: 'meta-llama/llama-4-maverick-17b-128e-instruct',
-    maxOutput: 8192,
+    description:
+      'OpenAI GPT-OSS 120B 是一款拥有 1200 亿参数的顶尖语言模型，内置浏览器搜索和代码执行功能，并具备推理能力。',
+    displayName: 'GPT OSS 120B',
+    id: 'openai/gpt-oss-120b',
+    maxOutput: 65_536,
     pricing: {
-      input: 0.2,
-      output: 0.6,
+      units: [
+        { name: 'textInput', rate: 0.15, strategy: 'fixed', unit: 'millionTokens' },
+        { name: 'textOutput', rate: 0.75, strategy: 'fixed', unit: 'millionTokens' },
+      ],
     },
+    releasedAt: '2025-08-06',
     type: 'chat',
   },
   {
@@ -53,13 +49,68 @@ const groqChatModels: AIChatModelCard[] = [
       reasoning: true,
     },
     contextWindowTokens: 131_072,
-    displayName: 'Qwen QwQ 32B',
-    enabled: true,
-    id: 'qwen-qwq-32b',
-    maxOutput: 131_072,
+    description:
+      'OpenAI GPT-OSS 20B 是一款拥有 200 亿参数的顶尖语言模型，内置浏览器搜索和代码执行功能，并具备推理能力。',
+    displayName: 'GPT OSS 20B',
+    id: 'openai/gpt-oss-20b',
+    maxOutput: 65_536,
     pricing: {
-      input: 0.29,
-      output: 0.39,
+      units: [
+        { name: 'textInput', rate: 0.1, strategy: 'fixed', unit: 'millionTokens' },
+        { name: 'textOutput', rate: 0.5, strategy: 'fixed', unit: 'millionTokens' },
+      ],
+    },
+    releasedAt: '2025-08-06',
+    type: 'chat',
+  },
+  {
+    abilities: {
+      functionCall: true,
+    },
+    contextWindowTokens: 131_072,
+    description:
+      'kimi-k2 是一款具备超强代码和 Agent 能力的 MoE 架构基础模型，总参数 1T，激活参数 32B。在通用知识推理、编程、数学、Agent 等主要类别的基准性能测试中，K2 模型的性能超过其他主流开源模型。',
+    displayName: 'Kimi K2 Instruct',
+    enabled: true,
+    id: 'moonshotai/kimi-k2-instruct',
+    maxOutput: 16_384,
+    pricing: {
+      units: [
+        { name: 'textInput', rate: 1, strategy: 'fixed', unit: 'millionTokens' },
+        { name: 'textOutput', rate: 3, strategy: 'fixed', unit: 'millionTokens' },
+      ],
+    },
+    releasedAt: '2025-07-11',
+    type: 'chat',
+  },
+  {
+    contextWindowTokens: 131_072,
+    displayName: 'Llama 4 Scout (17Bx16E)',
+    enabled: true,
+    id: 'meta-llama/llama-4-scout-17b-16e-instruct',
+    maxOutput: 8192,
+    pricing: {
+      units: [
+        { name: 'textInput', rate: 0.11, strategy: 'fixed', unit: 'millionTokens' },
+        { name: 'textOutput', rate: 0.34, strategy: 'fixed', unit: 'millionTokens' },
+      ],
+    },
+    type: 'chat',
+  },
+  {
+    abilities: {
+      functionCall: true,
+    },
+    contextWindowTokens: 131_072,
+    displayName: 'Llama 4 Maverick (17Bx128E)',
+    enabled: true,
+    id: 'meta-llama/llama-4-maverick-17b-128e-instruct',
+    maxOutput: 8192,
+    pricing: {
+      units: [
+        { name: 'textInput', rate: 0.2, strategy: 'fixed', unit: 'millionTokens' },
+        { name: 'textOutput', rate: 0.6, strategy: 'fixed', unit: 'millionTokens' },
+      ],
     },
     type: 'chat',
   },
@@ -72,8 +123,10 @@ const groqChatModels: AIChatModelCard[] = [
     id: 'qwen/qwen3-32b',
     maxOutput: 40_960,
     pricing: {
-      input: 0.29,
-      output: 0.59,
+      units: [
+        { name: 'textInput', rate: 0.29, strategy: 'fixed', unit: 'millionTokens' },
+        { name: 'textOutput', rate: 0.59, strategy: 'fixed', unit: 'millionTokens' },
+      ],
     },
     type: 'chat',
   },
@@ -87,23 +140,10 @@ const groqChatModels: AIChatModelCard[] = [
     id: 'deepseek-r1-distill-llama-70b',
     maxOutput: 131_072,
     pricing: {
-      input: 0.75, // 0.75 - 5.00
-      output: 0.99, // 0.99 - 5.00
-    },
-    type: 'chat',
-  },
-  {
-    abilities: {
-      functionCall: true,
-    },
-    contextWindowTokens: 8192,
-    description: 'Gemma 2 9B 是一款优化用于特定任务和工具整合的模型。',
-    displayName: 'Gemma 2 9B',
-    id: 'gemma2-9b-it',
-    maxOutput: 8192,
-    pricing: {
-      input: 0.2,
-      output: 0.2,
+      units: [
+        { name: 'textInput', rate: 0.75, strategy: 'fixed', unit: 'millionTokens' },
+        { name: 'textOutput', rate: 0.99, strategy: 'fixed', unit: 'millionTokens' },
+      ],
     },
     type: 'chat',
   },
@@ -118,8 +158,10 @@ const groqChatModels: AIChatModelCard[] = [
     id: 'llama-3.1-8b-instant',
     maxOutput: 131_072,
     pricing: {
-      input: 0.05,
-      output: 0.08,
+      units: [
+        { name: 'textInput', rate: 0.05, strategy: 'fixed', unit: 'millionTokens' },
+        { name: 'textOutput', rate: 0.08, strategy: 'fixed', unit: 'millionTokens' },
+      ],
     },
     type: 'chat',
   },
@@ -134,8 +176,10 @@ const groqChatModels: AIChatModelCard[] = [
     id: 'llama-3.3-70b-versatile',
     maxOutput: 32_768,
     pricing: {
-      input: 0.59,
-      output: 0.79,
+      units: [
+        { name: 'textInput', rate: 0.59, strategy: 'fixed', unit: 'millionTokens' },
+        { name: 'textOutput', rate: 0.79, strategy: 'fixed', unit: 'millionTokens' },
+      ],
     },
     type: 'chat',
   },
@@ -145,8 +189,10 @@ const groqChatModels: AIChatModelCard[] = [
     id: 'mistral-saba-24b',
     maxOutput: 32_768,
     pricing: {
-      input: 0.79,
-      output: 0.79,
+      units: [
+        { name: 'textInput', rate: 0.79, strategy: 'fixed', unit: 'millionTokens' },
+        { name: 'textOutput', rate: 0.79, strategy: 'fixed', unit: 'millionTokens' },
+      ],
     },
     type: 'chat',
   },
@@ -156,8 +202,10 @@ const groqChatModels: AIChatModelCard[] = [
     id: 'meta-llama/llama-guard-4-12b',
     maxOutput: 1024,
     pricing: {
-      input: 0.2,
-      output: 0.2,
+      units: [
+        { name: 'textInput', rate: 0.2, strategy: 'fixed', unit: 'millionTokens' },
+        { name: 'textOutput', rate: 0.2, strategy: 'fixed', unit: 'millionTokens' },
+      ],
     },
     type: 'chat',
   },
